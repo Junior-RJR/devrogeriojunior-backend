@@ -75,5 +75,9 @@ def chatbot():
     response = generate_response(message)
     return jsonify({'response': response})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    from werkzeug.serving import run_simple
+    import os
+
+    port = int(os.environ.get("PORT", 5000))
+    run_simple("0.0.0.0", port, app)
