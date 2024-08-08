@@ -8,18 +8,18 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-box" id="chat-box">
-        </div>
+        <div class="chat-box" id="chat-box"></div>
         <div class="input-box">
             <input type="text" id="user-input" placeholder="Digite sua mensagem aqui...">
             <button onclick="sendMessage()">Enviar</button>
         </div>
     </div>
+
     <script>
-        function sendMessage() {
-            const userInput = document.getElementById('user-input').value;
+        function sendMessage(message = null) {
+            const userInput = message || document.getElementById('user-input').value;
             if (userInput) {
-                displayMessage('Você', userInput);
+                displayMessage('Você', userInput, true);
                 fetch('/chatbot', {
                     method: 'POST',
                     headers: {
@@ -29,18 +29,36 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    displayMessage('RJR-Bot', data.response);
+                    displayMessage('RJR-Bot', data.response, false);
                 })
                 .catch(error => console.error('Error:', error));
                 document.getElementById('user-input').value = '';
             }
         }
 
-        function displayMessage(sender, message) {
+        function displayMessage(sender, message, isUser = false) {
             const chatBox = document.getElementById('chat-box');
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
             messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+
+            if (!isUser && message.includes('opções')) {
+                const options = message.split('\n').filter(line => line.startsWith('-'));
+                const textContent = message.replace(/- .+/g, ''); 
+
+                messageElement.innerHTML = `<strong>${sender}:</strong> ${textContent}`;
+
+                options.forEach(option => {
+                    const optionButton = document.createElement('button');
+                    optionButton.textContent = option.replace('- ', '');
+                    optionButton.className = 'option-button';
+                    optionButton.addEventListener('click', () => {
+                        sendMessage(option.replace('- ', ''));
+                    });
+                    messageElement.appendChild(optionButton);
+                });
+            }
+
             chatBox.appendChild(messageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
