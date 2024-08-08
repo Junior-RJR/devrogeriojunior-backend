@@ -1,25 +1,27 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import unicodedata
 
 app = Flask(__name__)
 CORS(app)
 
+def remove_accents(input_str):
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
+    return "".join([c for c in nfkd_form if not unicodedata.combining(c)])
+
 def generate_response(message):
-    message = message.lower()
+    message = remove_accents(message.lower())
     
-    if 'olá' in message or 'oi' in message:
+    if 'ola' in message or 'oi' in message:
         return 'Olá! Como posso ajudar você hoje?'
     
-    elif 'ola' in message or 'oii' in message:
-        return 'Olá! Como posso ajudar você hoje?'
-    
-    elif 'quem é você' in message or 'quem é voce' in message:
+    elif 'quem e voce' in message or 'quem e voce' in message:
         return 'Eu sou um chatbot criado pelo Junior, que posso responder a perguntas sobre o currículo e outras coisas referente a ele =)'
     
     elif 'habilidades' in message or 'skills' in message:
         return 'Junior tem habilidades em HTML5, CSS3, JavaScript, TypeScript, React, Node.js, Python, PHP, e utiliza a Metodologia Ágil Scrum.'
     
-    elif 'experiência' in message or 'experiencia' in message:
+    elif 'experiencia' in message or 'experiencia' in message:
         return 'Junior tem experiência em desenvolvimento de aplicativos e sites, incluindo projetos como RJR-Docs, Infor-mais e Pastelaria Maza.'
     
     elif 'contato' in message:
@@ -40,10 +42,10 @@ def generate_response(message):
     elif 'funcionalidades' in message or 'o que o chatbot pode fazer' in message:
         return 'O chatbot pode responder a perguntas frequentes, fornecer informações de contato, detalhes sobre redes sociais e explicar as tecnologias usadas no site.'
     
-    elif 'sobre mim' in message or 'quem é você' in message:
+    elif 'sobre mim' in message or 'quem e voce' in message:
         return 'Eu sou o RJR-Bot, o assistente virtual do site. Estou aqui para ajudar com informações e responder às suas perguntas!'
     
-    elif 'propósito' in message:
+    elif 'proposito' in message:
         return 'Meu propósito é fornecer informações rápidas e úteis sobre o site, o desenvolvedor e outros detalhes relevantes.'
     
     elif 'site' in message and 'novidades' in message:
@@ -52,7 +54,7 @@ def generate_response(message):
     elif 'ajuda' in message:
         return 'Se você precisar de mais ajuda, entre em contato conosco pelo e-mail devrogeriojunior@gmail.com.'
     
-    elif 'mais informações' in message:
+    elif 'mais informacoes' in message:
         return 'Você pode encontrar mais informações em nosso site ou entrando em contato através das nossas redes sociais e e-mail.'
     
     elif 'estrutura do site' in message:
@@ -60,6 +62,21 @@ def generate_response(message):
     
     elif 'biblioteca' in message:
         return 'Sim, usei bibliotecas como Axios para requisições HTTP e Flask para criar o backend em Python.'
+    
+    elif 'projetos' in message:
+        return 'Junior já trabalhou em vários projetos, incluindo RJR-Docs, Infor-mais e Pastelaria Maza, focando em front-end e back-end.'
+    
+    elif 'formacao' in message or 'educacao' in message:
+        return 'Junior possui formação em Ciência da Computação e tem participado de vários cursos e workshops para manter suas habilidades atualizadas.'
+    
+    elif 'linguagens de programacao' in message:
+        return 'Junior tem conhecimento em diversas linguagens de programação, como Python, JavaScript, PHP, e TypeScript.'
+    
+    elif 'metodologia' in message or 'metodologias' in message:
+        return 'Junior utiliza a metodologia Ágil Scrum para gerenciar seus projetos e garantir entregas eficientes.'
+    
+    elif 'clientes' in message:
+        return 'Junior já trabalhou com clientes de diversos setores, sempre focando em entender as necessidades do cliente e entregar soluções eficazes.'
     
     else:
         return 'Desculpe, não entendi sua pergunta. Pode reformular?'
