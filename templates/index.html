@@ -42,7 +42,7 @@
             messageElement.classList.add('message');
             messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
 
-            if (!isUser && message.includes('opções')) {
+            if (!isUser && message.includes('Opções:')) {
                 const options = message.split('\n').filter(line => line.startsWith('-'));
                 const textContent = message.replace(/- .+/g, ''); 
 
@@ -60,8 +60,16 @@
             }
 
             chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight; 
         }
+
+        const chatBox = document.getElementById('chat-box');
+        const observer = new MutationObserver(() => {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        observer.observe(chatBox, { childList: true });
+
     </script>
 </body>
 </html>
