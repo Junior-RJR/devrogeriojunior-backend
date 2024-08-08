@@ -79,7 +79,14 @@ def generate_response(message):
         return 'Junior já trabalhou com clientes de diversos setores, sempre focando em entender as necessidades do cliente e entregar soluções eficazes.'
     
     else:
-        return 'Desculpe, não entendi sua pergunta. Pode reformular?'
+        return (
+            "Desculpe, não entendi sua pergunta. Você pode tentar uma dessas opções:\n"
+            "- Perguntar sobre minhas habilidades\n"
+            "- Perguntar sobre minha experiência\n"
+            "- Solicitar informações de contato\n"
+            "- Perguntar sobre as redes sociais\n"
+            "Clique em uma das opções ou reformule sua pergunta."
+        )
 
 @app.route('/')
 def home():
